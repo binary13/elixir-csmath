@@ -58,7 +58,7 @@ defmodule Blackjack do
   
   
   def blackjack?(hand) do
-    if length(hand) == true && get_value(hand) == 21 do
+    if length(hand) == 2 && get_value(hand) == 21 do
       true
     else
       false
@@ -87,19 +87,30 @@ defmodule Blackjack do
   end
   
   
+  def print_hand(hand) do
+    IO.puts(
+      for card <- hand do
+        card <> ", "
+      end
+      |> String.trim_trailing(", ")
+    ) 
+  end
+
+  
   def player_turn(deck, player_hand, dealer_hand) do
-    IO.puts("Your hand: #{player_hand}")
+    IO.puts "Your turn!"
+    IO.puts("Your hand: #{player_hand |> print_hand}")
     
-    {hole_card, shown_cards} = Enum.split(dealer_hand, 1)
-    IO.puts("Dealer's hand: #{shown_cards}")
-    decision = IO.get("Do you want to [h]it or [s]tand?") |> String.trim
+    {_hole_card, shown_cards} = Enum.split(dealer_hand, 1)
+    IO.puts("Dealer's hand: #{shown_cards |> print_hand}")
+    decision = IO.gets("Do you want to [h]it or [s]tand?") |> String.trim
     
     if Enum.member?(["H", "h", "hit"], decision) == true do
       {new, deck} = deal(deck, 1)
       if get_value(player_hand ++ new) > 21 do
         IO.puts "You busted!"
-        IO.puts "Your hand was: #{player_hand ++ new}"
-        IO.puts "Dealer's hand was: #{dealer_hand}"
+        IO.puts "Your hand was: #{print_hand(player_hand ++ new)}"
+        IO.puts "Dealer's hand was: #{dealer_hand |> print_hand}"
         play_again?()
       end
       dealer_turn(deck, player_hand ++ new, dealer_hand, false)
@@ -110,48 +121,56 @@ defmodule Blackjack do
   
   
   def dealer_turn(deck, player_hand, dealer_hand, player_stand) do
-    dealer_hand = 
-      if get_value(dealer_hand) < 17 do
-        IO.puts "Dealer hits."
-        {new, deck} = deal(deck, 1)
-        dealer_hand ++ new
-      else
-        IO.puts "Dealer stands."
-        dealer_hand
-      end
-      
-    if get_value(dealer_hand) > 21 do
-      IO.puts "Dealer busted! You win!"
-      IO.puts "Your hand was: #{player_hand}"
-      IO.puts "Dealer's hand was: #{dealer_hand}"
-      play_again?()
-    end
-    
-    if player_stand == false do
-      player_turn(deck, player_hand, dealer_hand)
-    else
-      if get_value(dealer_hand) < 17 do
-        dealer_turn(deck, player_hand, dealer_hand, player_stand)
-      else
-        compare_values(player_hand, dealer_hand)
+    IO.puts "Dealer's turn..."
+    {new, deck} = deal(deck, 1)
+    if get_value(dealer_hand) < 17 do
+      IO.puts "Dealer hits."
+      IO.puts "Dealer draws #{new}"  
+      if get_value(dealer_hand) > 21 do
+        IO.puts "Dealer busted! You win!"
+        IO.puts "Your hand was: #{print_hand(player_hand)}"
+        IO.puts "Dealer's hand was: #{print_hand(dealer_hand ++ new)}"
         play_again?()
+      else
+        {_hole_card, shown_cards} = Enum.split(dealer_hand, 1)
+        IO.puts "Dealer's hand: #{print_hand(shown_cards ++ new)}"
+        if player_stand do
+          dealer_turn(deck, player_hand, dealer_hand ++ new, player_stand)
+        else
+          player_turn(deck, player_hand, dealer_hand ++ new)
+        end
+      end  
+    else
+      IO.puts "Dealer stands."
+      {_hole_card, shown_cards} = Enum.split(dealer_hand, 1)
+      IO.puts "Dealer's hand: #{print_hand(shown_cards)}"
+      if player_stand do
+        compare_values(player_hand, dealer_hand)
+      else
+        player_turn(Enum.shuffle(deck ++ new), player_hand, dealer_hand)
       end
-    end  
+    end
   end
   
     
   def play_again? do
-    decision = IO.gets("Do you want to play again? ") |> String.trim
-    if Enum.member?(["yes", "y"], decision |> String.downcase) == true do
+    decision = IO.gets("Do you want to play again? ") |> String.trim |> String.downcase
+    if Enum.member?(["yes", "y"], decision) == true do
       clear()
       start()
-    else
-      nil
     end
   end
   
   
   def compare_values(player_hand, dealer_hand) do
-    # TODO: Put some code here!
+    cond do
+      get_value(player_hand) > get_value(dealer_hand) ->
+        IO.puts "You win! YAY!"
+      get_value(dealer_hand) > get_value(player_hand) ->
+        IO.puts "Dealer wins. Too bad."
+      get_value(dealer_hand) == get_value(player_hand) ->
+        IO.puts "It's a push!"
+    end
   end
+
 end
