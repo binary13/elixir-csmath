@@ -88,12 +88,7 @@ defmodule Blackjack do
   
   
   def print_hand(hand) do
-    IO.puts(
-      for card <- hand do
-        card <> ", "
-      end
-      |> String.trim_trailing(", ")
-    ) 
+    IO.puts Enum.join(hand, ", ")
   end
 
   
