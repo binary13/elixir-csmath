@@ -151,7 +151,6 @@ defmodule Blackjack do
   def play_again? do
     decision = IO.gets("Do you want to play again? ") |> String.trim |> String.downcase
     if Enum.member?(["yes", "y"], decision) == true do
-      clear()
       play()
     end
   end
