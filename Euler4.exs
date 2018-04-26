@@ -12,17 +12,26 @@ defmodule Pal do
   end
   
   def largest_pal_product(digits) do
-    product(num_digits(digits), num_digits(digits))
+    pal_products(num_digits(digits), num_digits(digits), [])
+    |> Enum.max
   end
   
-  def product(num1, num2) do
+  def pal_products(1, 1, list) do
+    list
+  end
+
+  def pal_products(num1, num2, list) do
     if is_palindrome?(num1 * num2) do
-      num1 * num2
+      if num2 > 1 do
+        pal_products(num1, num2 - 1, list ++ [num1 * num2])
+      else
+        pal_products(num1-1, num1-1, list ++ [num1 * num2])
+      end
     else
       if num2 > 1 do
-        product(num1, num2 - 1)
+        pal_products(num1, num2 - 1, list)
       else
-        product(num1-1, num1-1)
+        pal_products(num1-1, num1-1, list)
       end
     end
   end
