@@ -22,5 +22,5 @@ defmodule Divisible do
   end
 end 
 
-Divisible.smallest_product(1,10) |> IO.puts
-Divisible.smallest_product(1,20) |> IO.puts
+Divisible.smallest_product(1,10) |> IO.puts # Expect 2520
+Divisible.smallest_product(1,20) |> IO.puts # Produces 232792560
