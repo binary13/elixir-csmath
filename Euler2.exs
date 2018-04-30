@@ -29,3 +29,4 @@ end
 
 IO.puts Fibsum.evensum(4000000)
 #IO.inspect(Fibsum.fiblist(50))
+# Got 4613732

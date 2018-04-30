@@ -21,3 +21,6 @@ defmodule Divisible do
     end
   end
 end 
+
+Divisible.smallest_product(1,10) |> IO.puts
+Divisible.smallest_product(1,20) |> IO.puts
