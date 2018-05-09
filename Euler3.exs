@@ -4,7 +4,7 @@ defmodule Prime do
   end
   
   def is_prime?(num, divisor \\ 2) do
-    if divisor <= div(num,2) do
+    if divisor < div(num,2) do
       if rem(num, divisor) == 0 do
         false
       else
@@ -59,3 +59,4 @@ defmodule Prime do
 end
 
 IO.puts Prime.max_prime_factor(600_851_475_143)
+# Expect
