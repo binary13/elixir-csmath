@@ -1,3 +1,4 @@
+#Brute force - very slow but works
 defmodule Divisible do
   
   def by(num, divsr) do
@@ -25,7 +26,95 @@ end
 #Divisible.smallest_product(1,10) |> IO.puts # Expect 2520
 #Divisible.smallest_product(1,20) |> IO.puts # Produces 232792560
 
-# Eamon Payton's version - produces a number much too large
+
+# Factor-first version - much faster
+defmodule Euler5 do
+  
+  # Single-argument starting point for find_factors
+  def factor(num) do
+    find_factors(num, 2, [])       
+  end
+
+  # End point for recursive function find_factors
+  def find_factors(1, _divisor, list) do
+    list
+  end
+
+  # Finds list of prime factors of a number
+  def find_factors(num, divisor, list) do
+    if rem(num, divisor) == 0 do
+      find_factors(div(num, divisor), divisor, list ++ [divisor])
+    else
+      find_factors(num, divisor+1, list)
+    end
+  end
+
+  # Finds a list of lists of prime factors of a range from 2 to num
+  def factor_range(num) do
+    for x <- 2..num do
+      factor x
+    end
+  end
+
+  # Determine the number of an element in a list
+  def count(list, element) do
+    Enum.count(list, fn x -> x == element end)
+  end
+
+  # Determine greatest number of an element in a list of lists
+  # Example: max_power([[2,2,2], [2,2,3]], 2) ==> 3
+  def max_power(list_of_lists, element) do
+    for list <- list_of_lists do
+      count(list, element)
+    end
+    |> Enum.max
+  end
+
+  # Determine greatest number of a list of elements in a list of lists
+  # Example: factor_powers([[2,2,2], [2,2,3]], [2,3]) ==> [3, 1]
+  def factor_powers(list_of_lists, list_of_factors) do
+    for factor <- list_of_factors do
+      max_power(list_of_lists, factor)
+    end
+  end
+
+  # Zip factors and powers into a list of tuples
+  def zip(list_of_factors, list_of_powers) do
+    Enum.zip(list_of_factors, list_of_powers)
+  end
+
+  # Raise each factor to the appropriate power
+  def apply_powers(list_of_tuples) do
+    pow_list = fn {a, b} -> :math.pow(a, b) end
+    Enum.map(list_of_tuples, fn x -> pow_list.(x) end)
+  end
+
+  # Multiply a list of values
+  def multiply(list) do
+    Enum.reduce(list, fn (x, acc) -> x*acc end)
+  end
+
+  # Find the smallest number divisible by all numbers in range 2..num
+  def smallest_div_num(num) do
+    list_of_lists = factor_range(num)
+    list_of_factors = list_of_lists |> List.flatten |> Enum.uniq
+    list_of_powers = factor_powers(list_of_lists, list_of_factors)
+
+    zip(list_of_factors, list_of_powers)
+    |> apply_powers
+    |> multiply    
+  end
+
+  def go(num) do
+    IO.puts smallest_div_num(num)
+  end
+end
+
+
+
+##################################################
+# Eamonn Payton's version - fast but complicated #
+##################################################
 defmodule Euler5_alt do
     def prime(n, m, l) when m < div(n, 2) do
         cond do
@@ -95,4 +184,6 @@ defmodule Euler5_alt do
         IO.puts("Euler 5: #{Enum.reduce(check_begin(x), &(&1*&2))}")
     end
 end
-Euler5_alt.final(99)
+#Euler5_alt.final(99)
+
+
