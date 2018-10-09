@@ -31,7 +31,8 @@ defmodule Prime do
   def generate_nth(num) do
     generate_list(num)
     |> List.last
+    |> IO.puts
   end
 end
     
-  
+Prime.generate_nth(10001)  

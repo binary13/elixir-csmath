@@ -18,7 +18,7 @@ defmodule Divisible do
     if by_range(num, lower, upper) == true do
       num
     else
-      smallest_product(num + 1, lower, upper)
+      smallest_product(num + upper, lower, upper)
     end
   end
 end 
@@ -102,7 +102,8 @@ defmodule Euler5 do
 
     zip(list_of_factors, list_of_powers)
     |> apply_powers
-    |> multiply    
+    |> multiply
+    |> Kernel.trunc   
   end
 
   def go(num) do
@@ -186,4 +187,4 @@ defmodule Euler5_alt do
 end
 #Euler5_alt.final(99)
 
-
+Euler5.go(20)

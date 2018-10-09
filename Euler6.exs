@@ -15,5 +15,5 @@ defmodule Euler6 do
   end
 end
 
-IO.puts Euler6.diff(10)
+#IO.puts Euler6.diff(10)
 IO.puts Euler6.diff(100)

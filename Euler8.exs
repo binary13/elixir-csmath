@@ -22,3 +22,5 @@ defmodule Euler8 do
         |> IO.puts
     end
 end
+
+Euler8.go
