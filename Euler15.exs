@@ -21,8 +21,9 @@ defmodule Euler15 do
   end
 
   def filter(num, rows) do
-    if Enum.count(Integer.digits(num,2), &(&1 == 1)) == rows do
-      Integer.digits(num, 2) |> IO.inspect
+    digits = Integer.digits(num, 2)
+    if Enum.count(digits, &(&1 == 1)) == rows do
+      digits |> IO.inspect
       true
     else
       false
