@@ -1,8 +1,21 @@
 defmodule Euler15 do
   def go(n) do
-    #matrix_recursive(0, ((:math.pow(2, n)|> round)-1), n)
-    matrix(n)
+    div(div(factorial(n*2), factorial(n)), factorial(n))
   end
+
+  def factorial(n, product \\ 1) do
+    if n == 1 do 
+      product
+    else
+      factorial(n-1, product*n)
+    end
+  end
+
+
+
+
+
+# Brute force method
 
   def matrix(n) do
     my_filter = fn (num) -> filter(num, n) end 
