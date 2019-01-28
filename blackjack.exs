@@ -111,7 +111,7 @@ defmodule Blackjack do
 
   def dealer_turn(deck, player_hand, dealer_hand) do
     IO.puts("Dealer's hand: #{print_hand(dealer_hand)}")
-    if get_value(dealer_hand) < 17 do
+    if get_value(dealer_hand) < 18 do
       dealer_hit(deck, player_hand, dealer_hand)
     else
       IO.puts "Dealer stands."
