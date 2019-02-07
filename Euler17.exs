@@ -1,11 +1,26 @@
 defmodule Euler17 do
-  # def go(n) do
-  #   for num <- 1..n do
-  #     num_to_words(num)
-  #   end
-  #   |> Enum.join
-  #   |> Enum.count
-  # end
+  def go(n) do
+    for num <- 1..n do
+      count(num)
+    end
+    |> Enum.sum
+  end
+
+  def print(num) do
+  	for n <- 1..num do
+  		num_to_words(n)
+  		|> IO.puts
+  	end
+  	
+  end
+
+  def count(num) do
+  	num_to_words(num)
+  	|> String.replace(" ", "")
+  	|> String.replace("-", "")
+  	|> String.graphemes
+  	|> Enum.count
+  end
 
   def num_to_words(num) do
   	digits = Integer.digits(num)
@@ -27,6 +42,7 @@ defmodule Euler17 do
   		[1,2] -> "twelve"
   		[1,3] -> "thirteen"
   		[1,5] -> "fifteen"
+  		[1,8] -> "eighteen"
   		_ -> digit_to_word(Enum.at(t,0)) <> "teen"
   		end
   	else
@@ -36,6 +52,7 @@ defmodule Euler17 do
   			3 -> "thirty-"
   			4 -> "forty-"
   			5 -> "fifty-"
+  			8 -> "eighty-"
   			_ -> digit_to_word(h) <> "ty-"
   		end
   		<> digit_to_word(Enum.at(t,0))
@@ -46,8 +63,8 @@ defmodule Euler17 do
   def three_digits_to_word(num) do
   	[h|rest] = num
   	case Enum.at(num, 0) do
-  		0 -> " and "
-  		_ -> digit_to_word(h) <> " hundred and "
+  		0 -> if two_digits_to_word(rest) == "", do: "", else: "and "
+  		_ -> if two_digits_to_word(rest) == "", do: digit_to_word(h) <> " hundred", else: digit_to_word(h) <> " hundred and "
   	end
   	<> two_digits_to_word(rest)
   end

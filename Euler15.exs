@@ -1,6 +1,7 @@
 defmodule Euler15 do
   def go(n) do
-    div(div(factorial(n*2), factorial(n)), factorial(n))
+    div(factorial(n*2), factorial(n))
+    |> div(factorial(n))
   end
 
   def factorial(n, product \\ 1) do
