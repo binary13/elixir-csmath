@@ -14,43 +14,71 @@
 
 defmodule Euler19 do
 
-	def days_of_the_week, do: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+	###############################################
+	#                  CONSTANTS				  #
+	###############################################
+	def days_of_the_week, do: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 	def	months, do: ["January", "February", "March", "April", "May", "June", 
-					 "July", "August", "September", "November", "December"]
+					 "July", "August", "September", "October", "November", "December"]
 	def days_in_month, do: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 	def start_date, do: ["Monday", "January", 1, 1900]
-	
-	def build_month([day, month, 1, year]) do
-		first_day_index = Enum.find_index(days_of_the_week, fn x -> x == day end)
-		num_days = Enum.at(days_in_month, Enum.find_index(months, fn x -> x == month end))
+	###############################################
 
-		for num <- 1..num_days do
-			[Enum.at(days_of_the_week, rem(num+first_day_index, 7)-1), month, num, year]
-		end
+
+	def go do
+		count(2000) - count(1900)
 	end
 
-	def build_month([day, "February", 1, year]) do
-		
+	def count(end_year) do
+		build([], start_date(), end_year)
+		|> Enum.filter(fn [x, _, y, _] -> x == "Sunday" && y == 1 end)
+		|> Enum.count
 	end
 
-	def next(list) do
-		[lday, lmonth, ldate, lyear] = Enum.last(list)
-		lday_index = Enum.find_index(days_of_the_week, fn x -> x == lday end)
-		lmonth_index = Enum.find_index(months, fn x -> x == lmonth end)
-
-		[Enum.at(days_of_the_week, rem(lday_index+1, 7)), Enum.at(months, rem(lmonth_index+1, 12)), 1, lyear]
-	end
-
-	def build([day, month, 1, year], list, end_year) do
-		if year == end_year do
+	def build(list, day, end_year) do
+		[_lday, _lmonth, _ldate, lyear] = day
+		if lyear > end_year do
 			list
 		else
-			build_year(next(list), list, end_year)
+			build(list ++ [day], next(day), end_year)
 		end
 	end
 
-	def build_year([day, month, 1, year]) do
+
+	def next([lday, lmonth, ldate, lyear]) do
+		lday_index = Enum.find_index(days_of_the_week(), fn x -> x == lday end)
+		lmonth_index = Enum.find_index(months(), fn x -> x == lmonth end)
 		
+		days = 
+			if lmonth == "February" do
+				if rem(lyear, 4) == 0 do
+					if rem(lyear, 100) == 0 do
+						if rem(lyear, 400) == 0 do
+							29
+						else
+							28
+						end
+					else
+						29
+					end
+				else
+					28
+				end
+			else
+				Enum.at(days_in_month(), lmonth_index)
+			end
+
+		if ldate >= days do
+			if lmonth == "December" do
+				[Enum.at(days_of_the_week(), rem(lday_index+1, 7)), Enum.at(months(), rem(lmonth_index+1, 12)), 
+					1, lyear + 1]
+			else
+				[Enum.at(days_of_the_week(), rem(lday_index+1, 7)), Enum.at(months(), rem(lmonth_index+1, 12)), 
+					1, lyear]
+			end
+		else
+			[Enum.at(days_of_the_week(), rem(lday_index+1, 7)), lmonth, ldate + 1, lyear]
+		end
 	end
-	
+
 end
