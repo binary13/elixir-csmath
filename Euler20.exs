@@ -14,3 +14,20 @@
 #
 #
 ###########################################################
+
+defmodule Euler20 do
+	def factorial(num) do
+		Enum.reduce(1..num, 1, fn x, acc -> x * acc end)
+	end
+
+	def digits(num) do
+		num |> Integer.digits
+	end
+
+	def sum_fact(num) do
+		num
+		|> factorial
+		|> digits
+		|> Enum.sum
+	end
+end
