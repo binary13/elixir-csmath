@@ -26,7 +26,7 @@ defmodule Euler23 do
 	
 	def go do
 		generate_ubundant_numbers(1, [], 28123)
-		#|> filter_positive_integers
+		|> filter_nonsum_ints
 		#|> Enum.sum
 	end
 
@@ -59,5 +59,9 @@ defmodule Euler23 do
 	    else
 	      find_factors(num, divisor+1, factors)
 	    end
+	end
+
+	def filter_nonsum_ints(list) do
+		
 	end
 end
