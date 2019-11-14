@@ -24,5 +24,4 @@ defmodule Dictionary do
   def test do
     IO.puts "Testing! Testing! 1, 2, 3!"
   end
-
 end
