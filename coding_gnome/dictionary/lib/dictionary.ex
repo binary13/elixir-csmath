@@ -12,13 +12,19 @@ defmodule Dictionary do
       :world
 
   """
+  def hello do
+    :world
+  end
+
   def word_list do
-    contents = File.read!("assets/words.txt")
-    String.split(contents)
+    "assets/words.txt"
+    |> File.read!
+    |> String.split
   end
 
   def random_word do
-    Enum.random(word_list())
+    word_list()
+    |> Enum.random
   end
 
   def test do
