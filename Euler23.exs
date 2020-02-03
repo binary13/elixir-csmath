@@ -34,14 +34,20 @@ defmodule Euler23 do
 		num < sum_prop_divisors(num)
 	end
 
-	# Doesn't work - I don't need a list of abundant numbers
-	# def generate_abundant_numbers(num, list, limit) do
-		# cond do
-			# num > limit -> list
-			# num < sum_prop_divisors(num) -> generate_abundant_numbers(num + 1, list ++ [num], limit)
-			# true -> generate_abundant_numbers(num + 1, list, limit)
-		# end
-	# end
+	# Generates a list of abundant numbers less than a given limit
+	def generate_abundant_numbers(num \\ 12, list \\ [], limit) do
+		cond do
+			num > limit -> list
+			is_abundant?(num) -> generate_abundant_numbers(num + 1, list ++ [num], limit)
+			true -> generate_abundant_numbers(num + 1, list, limit)
+		end
+	end
+
+	# Determines if a given number can be written as the sum of two abundant numbers
+	def is_sum_of_abundant?(num) do
+		generate_abundant_numbers(num)
+		|>
+	end
 
 	def sum_prop_divisors(num) do
 		divisors(num)
