@@ -24,11 +24,11 @@
 
 defmodule Euler23 do
 
-	# def go do
-		# generate_abundant_numbers(1, [], 28123)
-		# |> filter_nonsum_ints
-		#|> Enum.sum
-	# end
+	def go(n) do
+		nums = generate_abundant_numbers(n)
+		Enum.filter(1..n, &(!is_sum_of_abundant?(&1, nums)))
+		|> Enum.sum
+	end
 
 	def is_abundant?(num) do
 		num < sum_prop_divisors(num)
@@ -44,9 +44,9 @@ defmodule Euler23 do
 	end
 
 	# Determines if a given number can be written as the sum of two abundant numbers
-	def is_sum_of_abundant?(num) do
-		generate_abundant_numbers(num)
-		|>
+	def is_sum_of_abundant?(num, nums) do
+		for a <- nums, b <- nums do a+b end
+		|> Enum.any?(&(&1==num))
 	end
 
 	def sum_prop_divisors(num) do
@@ -72,7 +72,7 @@ defmodule Euler23 do
 	    end
 	end
 
-	def filter_nonsum_ints(list) do
+	# def filter_nonsum_ints(list) do
 
-	end
+	# end
 end
