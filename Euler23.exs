@@ -24,7 +24,7 @@
 
 defmodule Euler23 do
 
-	def go(n) do
+	def go(n \\ 28123) do
 		nums = generate_abundant_numbers(n)
 		Enum.filter(1..n, &(!is_sum_of_abundant?(&1, nums)))
 		|> Enum.sum
