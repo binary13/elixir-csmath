@@ -25,26 +25,60 @@
 defmodule Euler23 do
 
 	def go(n \\ 28123) do
-		nums = generate_abundant_numbers(n)
-		Enum.filter(1..n, &(!is_sum_of_abundant?(&1, nums)))
+		sum = generate_abundant_numbers(n)
+		|> sums_of_abundant_numbers
+		|> filter_abundant_sums(n)
 		|> Enum.sum
+
+		IO.puts("\n")
+		IO.puts(String.duplicate("*", 40))
+		IO.puts("Final sum: ")
+		IO.puts(String.duplicate("*", 40))
+	end
+
+	# Generates a list of abundant numbers less than a given limit
+	def generate_abundant_numbers(num \\ 12, list \\ [], limit) do
+		cond do
+			num > limit ->
+				IO.puts(String.duplicate("*", 40))
+				IO.puts("Finished finding abundant numbers less than " <> Integer.to_string(limit))
+				IO.puts(String.duplicate("*", 40))
+				list
+			is_abundant?(num) ->
+				IO.puts(num)
+				generate_abundant_numbers(num + 1, list ++ [num], limit)
+			true -> generate_abundant_numbers(num + 1, list, limit)
+		end
+	end
+
+	def sums_of_abundant_numbers(list) do
+		list2 = for a <- list, b <- list do
+			a + b
+			IO.puts(a + b)
+		end
+		|> Enum.uniq()
+		IO.puts(String.duplicate("*", 40))
+		IO.puts "Finished finding sums of abundant numbers"
+		IO.puts(String.duplicate("*", 40))
+		list2
+	end
+
+	def filter_abundant_sums(list, n) do
+		Enum.filter(1..n, &(Enum.member?(list, &1)))
 	end
 
 	def is_abundant?(num) do
 		num < sum_prop_divisors(num)
 	end
 
-	# Generates a list of abundant numbers less than a given limit
-	def generate_abundant_numbers(num \\ 12, list \\ [], limit) do
-		cond do
-			num > limit -> list
-			is_abundant?(num) -> generate_abundant_numbers(num + 1, list ++ [num], limit)
-			true -> generate_abundant_numbers(num + 1, list, limit)
-		end
-	end
 
-	# Determines if a given number can be written as the sum of two abundant numbers
-	def is_sum_of_abundant?(num, nums) do
+
+	# Determines if a given number can be written as the sum of a pair of given
+	# numbers.
+	# Parameters:
+	# 	num: the number in question
+	# 	nums: a list of numbers to test
+	def is_sum_of_nums?(num, nums) do
 		for a <- nums, b <- nums do a+b end
 		|> Enum.any?(&(&1==num))
 	end
