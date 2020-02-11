@@ -24,7 +24,72 @@
 
 defmodule Euler23 do
 
-	def go(n \\ 28123) do
+	###########################################################
+	#
+	#  Third attempt following Euler23.py. Should be very fast.
+	#  Kind of a mix of the two methods.
+	#  Finished in 46 seconds.
+	#
+	###########################################################
+
+	def sum(count \\ 1, limit \\ 20161, list \\ [], acc \\ 0) do
+		cond do
+			count > limit ->
+				acc
+			is_abundant?(count) && !is_sum?(count, list) ->
+				sum(count+1, limit, [count | list], acc+count)
+			is_abundant?(count) ->
+				sum(count+1, limit, [count | list], acc)
+			!is_sum?(count, list) ->
+				sum(count+1, limit, list, acc+count)
+			true ->
+				sum(count+1, limit, list, acc)
+		end
+	end
+
+	def is_perfect_square?(num) do
+		trunc(:math.sqrt(num)) == :math.sqrt(num)
+	end
+
+	def is_abundant?(num) do
+		num < sum_prop_divisors(num)
+	end
+
+	def sum_prop_divisors(num, count \\ 2, acc \\ 1) do
+		cond do
+			count > :math.sqrt(num) -> trunc(acc)
+			rem(num, count) == 0 && count == num/count -> sum_prop_divisors(num, count+1, acc + count)
+			rem(num, count) == 0 -> sum_prop_divisors(num, count+1, acc + count + num/count)
+			true -> sum_prop_divisors(num, count+1, acc)
+		end
+	end
+
+	# Determines if a given number can be written as the sum of
+	# two elements of a list.
+	def is_sum?(num, nums) do
+		check_sum(num, nums, 0)
+	end
+
+	def check_sum(num, nums, count \\ 0) do
+		cond do
+			count >= length(nums) ->
+				false
+			(num - Enum.at(nums, count)) in nums ->
+				true
+			true ->
+				check_sum(num, nums, count+1)
+		end
+	end
+
+
+
+
+	##################################################
+	#
+	# Second attempt. Much faster, still inefficient.
+	#
+	##################################################
+	def go2(n \\ 20161) do
 		total = non_abundant_sums(1, 0, n)
 		IO.puts("Total = #{total}")
 	end
@@ -46,16 +111,16 @@ defmodule Euler23 do
 	def is_sum_of_abundant?(num, count \\ 12) do
 		cond do
 			count > num/2 -> false
-			is_abundant?(count) && is_abundant?(num-count) -> true
+			is_abundant2?(count) && is_abundant2?(num-count) -> true
 			true -> is_sum_of_abundant?(num, count+1)
 		end
 	end
 
-	def is_abundant?(num) do
-		num < sum_prop_divisors(num)
+	def is_abundant2?(num) do
+		num < sum_prop_divisors2(num)
 	end
 
-	def sum_prop_divisors(num) do
+	def sum_prop_divisors2(num) do
 		divisors(num)
 		|> Enum.sum
 	end
@@ -130,11 +195,4 @@ defmodule Euler23 do
 	def filter_abundant_sums(list, n) do
 		Enum.filter(1..n, &(Enum.member?(list, &1)))
 	end
-
-	# Determines if a given number can be written as the sum of a pair of given numbers.
-	def is_sum_of_nums?(num, nums) do
-		for a <- nums, b <- nums do a+b end
-		|> Enum.any?(&(&1==num))
-	end
-
 end
