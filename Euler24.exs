@@ -11,7 +11,11 @@
 defmodule Euler24 do
 
   def go do
-
+    numbers = [0,1,2,3,4]
+    for a<-numbers, b<-numbers, c<-numbers, d<-numbers, e<-numbers do
+      [a,b,c,d,e]
+    end
+    |> List.last
   end
 
 
