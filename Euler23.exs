@@ -28,7 +28,7 @@ defmodule Euler23 do
 	#
 	#  Third attempt following Euler23.py. Should be very fast.
 	#  Kind of a mix of the two methods.
-	#  Finished in 46 seconds.
+	#  Finished in 48.9 seconds.
 	#
 	###########################################################
 
@@ -83,12 +83,12 @@ defmodule Euler23 do
 
 
 
-
 	##################################################
 	#
 	# Second attempt. Much faster, still inefficient.
 	#
 	##################################################
+
 	def go2(n \\ 20161) do
 		total = non_abundant_sums(1, 0, n)
 		IO.puts("Total = #{total}")
@@ -148,10 +148,9 @@ defmodule Euler23 do
 
 #######################################################
 #
-# First attempt. Too slow.
+# First attempt. Very slow.
 #
 #######################################################
-
 
 	def go1(n \\ 28123) do
 		sum = generate_abundant_numbers(n)

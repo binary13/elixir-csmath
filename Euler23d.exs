@@ -1,5 +1,11 @@
+#########################################################
+#
 #  Modeled after this solution in clojure.
-
+#  Finished in 83.2 seconds.
+#  More functional, not as efficient as third attempt.
+#
+#########################################################
+#
 # (defn divisors [n]
 #   (if (= n 1)
 #     []
@@ -13,7 +19,8 @@
 #   (not-any? #(contains? abundants (- n %)) abundants))
 # 
 # (defn problem23 [] (reduce + (filter is-non-abundant-sum (range 1 28123))))
-
+#
+##########################################################
 
 defmodule Euler23 do
   def divisors(n) do
@@ -25,12 +32,14 @@ defmodule Euler23 do
 
   def abundants() do Enum.filter(1..20161, &(is_abundant(&1))) end
   
-  def is_non_abundant_sum(num) do
-    !Enum.any?(abundants, &())
+  def is_abundant_sum(list, num) do
+    Enum.any?(list, fn (x) -> Enum.member?(list, num-x) end)
   end
 
   def go do
-    Enum.filter(1..20161, &(is_non_abundant_sum(&1)))
+    abd = abundants()
+    
+    Enum.filter(1..20161, &(!is_abundant_sum(abd, &1)))
     |> Enum.sum
   end
 end
