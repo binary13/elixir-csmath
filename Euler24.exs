@@ -11,13 +11,39 @@
 defmodule Euler24 do
 
   def go do
-    numbers = [0,1,2,3,4]
-    for a<-numbers, b<-numbers, c<-numbers, d<-numbers, e<-numbers do
-      [a,b,c,d,e]
-    end
-    |> List.last
+    list = [0,1,2]
+
+    of(list)
+    # |> Enum.at(2)
+  end
+  
+  def of([]) do
+    [[]]
   end
 
+  def of(list) do
+    for h <- list, t <- of(list -- [h]), do: [h|t]
+  end
 
+  # def go do
+  #   list = [0,1,2,3,4,5,6,7,8,9]
+  #   lists = for a<-list, b<-list, c<-list, d<-list, e<-list,
+  #               f<-list, g<-list, h<-list, i<-list, j<-list do
+  #     [a,b,c,d,e,f,g,h,i,j]
+  #   end
+    
+  #   Enum.map(lists, fn x -> Enum.uniq(x) end)
+  #   |> Enum.sort
+  #   |> Enum.at(1000000)
+  #   |> inspect
+  # end
 
+  # def shuffle(list, count \\ 1, n \\ 10) do
+  #   inspect(list)
+    
+  #   cond do
+  #     count > n -> list
+  #     true -> shuffle(list ++ [Enum.shuffle(list)], count+1, n)
+  #   end
+  # end
 end
