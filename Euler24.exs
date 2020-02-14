@@ -11,10 +11,11 @@
 defmodule Euler24 do
 
   def go do
-    list = [0,1,2]
+    list = [0,1,2,3,4,5,6,7,8,9]
 
-    of(list)
-    # |> Enum.at(2)
+    permutations = of(list)
+    |> Enum.at(1000000 - 1)
+    |> Integer.undigits
   end
   
   def of([]) do
